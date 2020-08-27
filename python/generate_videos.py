@@ -57,7 +57,6 @@ def create_video_from_mats(mats_path, video_path):
         writer.write(mats[i])
     writer.release()
     
-# under construction
 def convert_avi_to_mp4(avi_file_path, output_name):
     os.popen("ffmpeg -i '{input}' -ac 2 -b:v 2000k -c:a aac -c:v libx264 -b:a 160k -vprofile high -bf 0 -strict experimental -f mp4 '{output}.mp4'".format(input = avi_file_path, output = output_name))
     return True
@@ -78,6 +77,7 @@ if __name__ == '__main__':
     # create_video_from_tifs(input_path, output_path)
     # create_video_from_mats(mats_path, video_path)
     
-    # # convert AVI to MP4
-    # video_path = '../outputs/pngs.avi'
-    # convert_avi_to_mp4(video_path, 'pngsmp4')
+    # convert AVI to MP4
+    avi_file_path = '../outputs/pngs.avi'
+    mp4_video_name = video_name+'_mp4'
+    convert_avi_to_mp4(avi_file_path, output_path+mp4_video_name)
