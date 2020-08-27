@@ -15,7 +15,7 @@ def sort_files(input_path, print_names=False):
             print(f)
     return filenames
 
-def create_video_from_pngs(filenames, output_path, video_name, frame_rate=10, frmt="mp4"):
+def create_video_from_pngs(filenames, output_path, video_name, frame_rate=10, frmt="mp4", is_rgb=False):
     # extract image from filename and store as a numpy array
     images = []
     for f in filenames:
@@ -28,9 +28,9 @@ def create_video_from_pngs(filenames, output_path, video_name, frame_rate=10, fr
     print("Output video shape: {}".format(img_shape))
     # create videowriter
     if frmt=="mp4":
-        out = cv2.VideoWriter(output_path+video_name+'.mp4', cv2.VideoWriter_fourcc(*'MP4V'), frame_rate, img_shape, 0)
+        out = cv2.VideoWriter(output_path+video_name+'.mp4', cv2.VideoWriter_fourcc(*'MP4V'), frame_rate, img_shape, is_rgb)
     elif frmt=="avi":
-        out = cv2.VideoWriter(output_path+video_name+'.avi', cv2.VideoWriter_fourcc(*'DIVX'), frame_rate, img_shape, 0)
+        out = cv2.VideoWriter(output_path+video_name+'.avi', cv2.VideoWriter_fourcc(*'DIVX'), frame_rate, img_shape, is_rgb)
     # write images to video
     for i in range(images.shape[0]):
         out.write(images[i])
@@ -65,19 +65,21 @@ def convert_avi_to_mp4(avi_file_path, output_name):
 if __name__ == '__main__':
 
     # set input path and output paths
-    input_path = '../data/pngs/'
+    input_path = '../data/pngs_rgb/'
     output_path = '../outputs/'
-    video_name = 'pngs'
+    video_name = 'pngs_rgb'
 
     # sort files
     filenames = sort_files(input_path, print_names=False)
 
     # select video creation operation
-    create_video_from_pngs(filenames, output_path, video_name, 10, frmt="avi")
+    create_video_from_pngs(filenames, output_path, video_name, 10, frmt="avi", is_rgb=True)
     # create_video_from_tifs(input_path, output_path)
     # create_video_from_mats(mats_path, video_path)
     
     # convert AVI to MP4
-    avi_file_path = '../outputs/pngs.avi'
+    convert = False
+    avi_file_path = '../outputs/pngs_rgb.avi'
     mp4_video_name = video_name+'_mp4'
-    convert_avi_to_mp4(avi_file_path, output_path+mp4_video_name)
+    if convert:    
+        convert_avi_to_mp4(avi_file_path, output_path+mp4_video_name)
