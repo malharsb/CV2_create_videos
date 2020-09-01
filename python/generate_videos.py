@@ -43,7 +43,7 @@ def create_video_from_pngs(filenames, output_path, video_name, frame_rate=10, fr
         im = np.array(im)
         images.append(im)
     images = np.array(images)
-    print("Images shape: {}".format(images[0].shape))
+    print("Images shape: {}".format(images.shape))
     write_video(images, output_path, video_name, frame_rate, frmt, is_rgb)
 
 def create_video_from_tifs(filenames, output_path, video_name, frame_rate=10, frmt="mp4", is_rgb=False):
@@ -52,12 +52,14 @@ def create_video_from_tifs(filenames, output_path, video_name, frame_rate=10, fr
         _, img = load_tifs(f)
         images.append(np.squeeze(img))
     images = np.array(images)
-    print(images.shape)
+    print("Images shape: {}".format(images.shape))
     write_video(images, output_path, video_name, frame_rate, frmt, is_rgb)
 
-# under construction
 def create_video_from_npy(filenames, output_path, video_name, frame_rate=10, frmt="mp4", is_rgb=False):
-    pass
+    filename = filenames[0] # get the file you want
+    images = np.load(filename)
+    print("Images shape: {}".format(images.shape))
+    write_video(images, output_path, video_name, frame_rate, frmt, is_rgb)
 
     
 def convert_avi_to_mp4(avi_file_path, output_name):
@@ -68,21 +70,20 @@ def convert_avi_to_mp4(avi_file_path, output_name):
 if __name__ == '__main__':
 
     # set input path and output paths
-    input_path = '../data/tifs/'
+    input_path = '../data/npy/'
     output_path = '../outputs/'
-    video_name = 'tifs'
+    video_name = 'npys'
 
     # sort files
-    filenames = sort_files(input_path, frmt='tif', print_names=False)
-
+    filenames = sort_files(input_path, frmt='npy', print_names=False)
     # select video creation operation
     # create_video_from_pngs(filenames, output_path, video_name, 10, frmt="avi", is_rgb=False)
     # create_video_from_tifs(filenames, output_path, video_name, 10, frmt="mp4", is_rgb=False)
-    create_video_from_npy(filenames, output_path, video_name, 10, frmt="mp4", is_rgb=False)
+    create_video_from_npy(filenames, output_path, video_name, 10, frmt="avi", is_rgb=False)
     
     # convert AVI to MP4
-    convert = 0
-    avi_file_path = '../outputs/tifs.avi'
+    convert = True
+    avi_file_path = '../outputs/npys.avi'
     mp4_video_name = video_name+'_mp4'
     if convert:    
         convert_avi_to_mp4(avi_file_path, output_path+mp4_video_name)
